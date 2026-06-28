@@ -1,248 +1,233 @@
-[Idealista Scraper](https://apify.com/burbn/idealista-scraper?fpr=data)
+[Idealista Scraper](https://apify.com/khadinakbar/idealista-scraper?fpr=data)
 
-# Idealista Properties Scraper | Idealista Real Estate Data API
+# 🏠 Idealista Scraper — Spain, Italy & Portugal Real Estate
 
-Search Idealista properties for rent or sale. Extract Idealista real estate data including property prices, addresses, sizes, rooms, floor plans, contact info, photos, videos, GPS coordinates, amenities, and more across Italy, Spain, and Portugal. The best Idealista property scraper for real estate research, market analysis, and property intelligence.
+Extract property listings from **Idealista.com**, Europe's largest real estate platform. Scrape prices, specs, GPS coordinates, agent contacts, amenities, energy ratings, and 28+ structured fields per listing — across Spain, Italy, and Portugal.
 
-## ❓ What is Idealista Properties Scraper?
+## What does Idealista Scraper do?
 
-**Idealista Properties Scraper** is a powerful Apify actor that lets you search and extract property listing data from **Idealista** — the largest real estate marketplace in Southern Europe. Whether you want to find rental apartments, compare property prices, monitor real estate markets, or collect property data for investment research — this Idealista property scraper does it all automatically.
+Idealista Scraper is an Apify actor that collects structured property data from [idealista.com](https://www.idealista.com) (Spain), [idealista.it](https://www.idealista.it) (Italy), and [idealista.pt](https://www.idealista.pt) (Portugal). It handles DataDome bot protection automatically using residential proxies and optional CapSolver integration, supports search queries and direct URLs, paginates through all result pages, and returns clean, analysis-ready JSON.
 
-With this Idealista properties search tool, you can:
+## Why use Idealista Scraper?
 
-- 🔍 **Search Idealista properties by location** — Search any city, neighborhood, or area across Italy, Spain, and Portugal
-- 🏠 **Extract for rent or sale** — Get rental listings or properties for sale with a single toggle
-- 💰 **Get complete pricing data** — Extract prices, price per sqm, price drops, and currency info
-- 🏢 **Get full property details** — Extract size, rooms, bathrooms, floor, address, GPS coordinates, description, and status
-- 📸 **Get all media** — Extract property thumbnails, all listing images, and video URLs
-- 📞 **Get contact information** — Extract agent name, agency, phone number, and contact method
-- 🎛️ **40+ advanced filters** — Filter by price, size, bedrooms, amenities, property type, and more
-- 📄 **Auto-pagination** — Automatically fetches all pages of results with smart rate limiting
-- 📊 **Export structured data** — Download results in JSON, CSV, Excel, XML, and RSS formats
+- **Pay only for what you scrape** — PAY_PER_EVENT pricing at $0.003/property (no flat monthly fee)
+- **Supports all 3 Idealista domains** — Spain, Italy, Portugal in one actor
+- **Two input modes** — search by location name OR paste any direct Idealista search URL
+- **Full pagination** — automatically navigates all result pages up to your limit
+- **MCP-ready** — semantic field names, fully compatible with Claude, ChatGPT, and Cursor via Apify's MCP server
+- **28+ structured fields** per property including GPS coordinates, amenity flags, and energy ratings
+- **DataDome bypass** — residential proxy + CapSolver integration for reliable access
 
-## 🎯 What Data Can You Extract from Idealista Properties?
+## ⚠️ DataDome Bot Protection — Important Note
 
-This Idealista property scraper extracts the following data for each listing:
+Idealista uses **DataDome** bot protection. To scrape reliably:
 
-| Field | Description |
-| --- | --- |
-| `propertyCode` | Unique Idealista property identifier |
-| `title` | Property listing title |
-| `description` | Full property description |
-| `price` | Property price (rent per month or sale price) |
-| `currencySuffix` | Currency and period (e.g., €/month) |
-| `priceByArea` | Price per square meter |
-| `formerPrice` | Previous price (if price dropped) |
-| `priceDropPercentage` | Price drop percentage |
-| `propertyType` | Property type (studio, flat, house, etc.) |
-| `operation` | Operation type (rent or sale) |
-| `size` | Property size in square meters |
-| `rooms` | Number of rooms |
-| `bathrooms` | Number of bathrooms |
-| `floor` | Floor number |
-| `address` | Full property address |
-| `province` | Province name |
-| `municipality` | City/municipality name |
-| `district` | District name |
-| `neighborhood` | Neighborhood name |
-| `country` | Country code (it, es, pt) |
-| `latitude` | GPS latitude coordinate |
-| `longitude` | GPS longitude coordinate |
-| `url` | Direct link to Idealista property page |
-| `thumbnail` | Property thumbnail image URL |
-| `images` | All property listing image URLs |
-| `videos` | Property video URLs |
-| `numPhotos` | Total number of photos |
-| `contactName` | Agent/owner contact name |
-| `commercialName` | Agency commercial name |
-| `phoneNumber` | Contact phone number |
-| `userType` | Contact type (professional or private) |
-| `hasLift` | Whether property has an elevator |
-| `hasSwimmingPool` | Whether property has a swimming pool |
-| `hasTerrace` | Whether property has a terrace |
-| `hasAirConditioning` | Whether property has air conditioning |
-| `hasGarden` | Whether property has a garden |
-| `hasBoxRoom` | Whether property has a box/storage room |
+1. **Residential proxies are required** (included in default proxy configuration — do not switch to datacenter proxies)
+2. **A CapSolver API key is strongly recommended** for handling visual CAPTCHA challenges. Without it, some runs may be blocked. Get your key at [capsolver.com](https://capsolver.com) — DatadomeSliderTask costs ~$0.004 per solve.
 
-## 📍 How to Get Idealista Location IDs
+Add your CapSolver key to the `capsolverApiKey` field in the actor input. The actor will automatically detect and solve challenges during the run.
 
-Before using this Idealista property scraper, you need a **location ID**. Get it using our companion actor:
+## What data does Idealista Scraper extract?
 
-👉 **[Idealista Auto-Complete](https://apify.com/burbn/idealista-auto-complete)** — Search for any city, neighborhood, or area and get the location ID instantly.
-
-**Example Idealista location IDs:**
-
-| Location | Location ID |
-| --- | --- |
-| Milano, Italy | `0-EU-IT-MI-01-001-135` |
-| Roma, Italy | `0-EU-IT-RM-01-001-088` |
-| Madrid, Spain | `0-EU-ES-28-07-001-079` |
-| Barcelona, Spain | `0-EU-ES-08-07-001-019` |
-| Lisbon, Portugal | `0-EU-PT-11-01-001-000` |
-
-## 🚀 How to Use Idealista Properties Scraper
-
-### Step 1: Get Your Location ID
-
-Use the **[Idealista Auto-Complete](https://apify.com/burbn/idealista-auto-complete)** actor to search for a city or area and get its location ID.
-
-### Step 2: Configure Your Search
-
-| Input | Type | Required | Default | Description |
-| --- | --- | --- | --- | --- |
-| `locationId` | String | ✅ Yes | `0-EU-IT-MI-01-001-135` | Idealista location ID from Auto-Complete |
-| `operation` | String | ✅ Yes | `rent` | `rent` or `sale` |
-| `country` | String | ❌ No | `it` | Country: `it`, `es`, `pt` |
-| `propertyType` | String | ❌ No | All | `homes`, `bedrooms`, `offices`, `premises`, etc. |
-| `sort` | String | ❌ No | `asc` | Sort by price: `asc` or `desc` |
-| `locale` | String | ❌ No | `en` | Language for descriptions |
-| `maxItems` | Number | ❌ No | `40` | Results per API page (max 40) |
-| `maxPages` | Number | ❌ No | `0` | Max pages to scrape (0 = all) |
-| `minPrice` | Number | ❌ No | `0` | Minimum price filter |
-| `maxPrice` | Number | ❌ No | `0` | Maximum price filter |
-| `minSize` | Number | ❌ No | `0` | Minimum size in sqm |
-| `maxSize` | Number | ❌ No | `0` | Maximum size in sqm |
-| `bedrooms` | String | ❌ No | Any | `0`, `1`, `2`, `3`, `4` |
-| `bathrooms` | String | ❌ No | Any | `1`, `2`, `3` |
-
-### Step 3: Run and Download Results
-
-Click **Start** to run the Idealista property scraper. Results are available in JSON, CSV, Excel, XML, and RSS formats.
-
-## 📋 Example Input
-
-```
-{
-  "locationId": "0-EU-IT-MI-01-001-135",
-  "operation": "rent",
-  "country": "it",
-  "sort": "asc",
-  "locale": "en",
-  "maxItems": 40,
-  "maxPages": 1,
-  "maxPrice": 1000,
-  "bedrooms": "2",
-  "airConditioning": true
-}
-```
-
-## 📋 Example Output
-
-```
-{
-  "propertyCode": "35524940",
-  "title": "Flat in via Privata Filippo Tommaso Marinetti",
-  "subtitle": "Turro, Milano",
-  "description": "Studio apartment available immediately, furnished...",
-  "price": 400,
-  "currencySuffix": "€/month",
-  "priceByArea": 16,
-  "propertyType": "studio",
-  "operation": "rent",
-  "size": 25,
-  "rooms": 1,
-  "bathrooms": 1,
-  "floor": "5",
-  "address": "via Privata Filippo Tommaso Marinetti",
-  "province": "Milano",
-  "municipality": "Milano",
-  "district": "Greco - Turro",
-  "neighborhood": "Turro",
-  "country": "it",
-  "latitude": 45.4972051,
-  "longitude": 9.2285924,
-  "url": "https://www.idealista.it/immobile/35524940/",
-  "thumbnail": "https://img4.idealista.it/...",
-  "images": ["https://img4.idealista.it/..."],
-  "videos": [],
-  "numPhotos": 7,
-  "hasLift": true,
-  "hasSwimmingPool": false,
-  "hasTerrace": false,
-  "hasAirConditioning": false,
-  "contactName": "LA CASA IN 24H DI STEFANO CECCONELLO",
-  "commercialName": "LA CASA IN 24H DI STEFANO CECCONELLO",
-  "phoneNumber": "0289735826",
-  "userType": "professional"
-}
-```
-
-## 🎨 Dataset Views
-
-The Idealista property scraper provides 3 organized dataset views for easy analysis:
-
-| View | Description |
-| --- | --- |
-| 📊 **Properties Overview** | Property code, thumbnail, title, price, type, size, rooms, address, images, videos, URL |
-| 📋 **Property Details** | Full details with coordinates, description, status, features, amenities, media |
-| 📞 **Contact Information** | Agent name, agency, phone number, contact type, and method |
-
-## 🎛️ Advanced Filters
-
-This Idealista scraper supports 40+ filters to narrow your property search:
-
-| Filter | Type | Values |
+| Field | Type | Description |
 | --- | --- | --- |
-| `swimmingPool` | Boolean | Swimming pool |
-| `airConditioning` | Boolean | Air conditioning |
-| `elevator` | Boolean | Elevator/lift |
-| `terrace` | Boolean | Terrace |
-| `garden` | Boolean | Garden |
-| `garage` | Boolean | Garage/parking |
-| `penthouse` | Boolean | Penthouse properties |
-| `duplex` | Boolean | Duplex properties |
-| `luxury` | Boolean | Luxury properties |
-| `seaViews` | Boolean | Sea view properties |
-| `exterior` | Boolean | Exterior-facing properties |
-| `virtualTour` | Boolean | Virtual tour available |
-| `storeRoom` | Boolean | Storage room |
-| `builtinWardrobes` | Boolean | Built-in wardrobes |
-| `accessible` | Boolean | Wheelchair accessible |
-| `privateOwner` | Boolean | Private owner listings |
-| `furnished` | String | `furnished` or `furnishedKitchen` |
-| `preservations` | String | `renew`, `newDevelopment`, `good` |
-| `sinceDate` | String | `T` (48h), `W` (week), `M` (month) |
-| `rentalUsages` | String | `seasonal` or `longTerm` |
-| `smokingPolicy` | String | `allowed` or `disallowed` |
-| `petsPolicy` | String | `allowed` or `disallowed` |
+| `property_id` | string | Idealista unique ID |
+| `url` | string | Direct link to property page |
+| `title` | string | Listing title |
+| `property_type` | string | homes / offices / premises / etc. |
+| `operation` | string | sale or rent |
+| `price` | number | Price in EUR |
+| `price_per_sqm` | number | Computed €/m² for market comparison |
+| `size_sqm` | number | Area in square meters |
+| `rooms` | number | Number of bedrooms |
+| `bathrooms` | number | Number of bathrooms |
+| `floor` | string | Floor level |
+| `address` | string | Street address |
+| `neighborhood` | string | Neighborhood/district |
+| `city` | string | City |
+| `province` | string | Province/region |
+| `country` | string | Country code (es/it/pt) |
+| `latitude` | number | GPS latitude |
+| `longitude` | number | GPS longitude |
+| `description` | string | Full listing description |
+| `thumbnail_url` | string | Primary photo URL |
+| `images` | array | All photo URLs |
+| `amenities` | object | terrace, lift, pool, AC, garage, garden, storage |
+| `energy_rating` | string | EU energy certificate (A–G) |
+| `agent_name` | string | Agency or seller name |
+| `agent_type` | string | Professional or private |
+| `agent_phone` | string | Contact phone number |
+| `is_new_development` | boolean | New construction flag |
+| `publication_date` | string | Listing publication date (ISO 8601) |
+| `scraped_at` | string | Extraction timestamp |
+| `source_url` | string | Source search page URL |
 
-## 💡 Use Cases for Idealista Properties Scraper
+## How to use Idealista Scraper
 
-- **Real Estate Research** — Search and compare rental or sale property prices across cities and neighborhoods
-- **Market Analysis** — Monitor property price trends, price drops, and new listings in target areas
-- **Investment Research** — Analyze property prices per sqm, rental yields, and market supply
-- **Relocation Planning** — Find apartments or houses matching your budget, size, and amenity requirements
-- **Lead Generation** — Extract agent and agency contact details for real estate business outreach
-- **Property Monitoring** — Track new listings, price changes, and availability in specific locations
-- **Data Journalism** — Collect real estate data for housing market reports and visualizations
-- **Academic Research** — Gather property data for urban planning, economic, or housing studies
+### Option 1 — Search by location (recommended)
 
-## 🔧 Tips for Best Results
+1. Set **Country** (Spain / Italy / Portugal)
+2. Set **Operation** (For Sale or For Rent)
+3. Set **Property Type** (Homes, Offices, Garages, etc.)
+4. Set **Location** — use the location slug from the Idealista URL (e.g. `madrid`, `barcelona`, `roma`, `lisboa`)
+5. Set **Max Results** — how many properties to return
+6. (Optional) Add your **CapSolver API Key** for reliable DataDome bypass
+7. Click Run
 
-1. **Start small** — Set `maxPages: 1` first to test your filters and preview results
-2. **Use Auto-Complete first** — Always get Idealista location IDs from the [Auto-Complete actor](https://apify.com/burbn/idealista-auto-complete)
-3. **Combine filters** — Use price, size, bedrooms, and amenity filters together to get exactly what you need
-4. **Use pagination wisely** — Set `maxPages: 0` to scrape ALL pages (can be thousands of listings!)
-5. **Export in your preferred format** — Download property data in JSON, CSV, or Excel
+### Option 2 — Paste a direct search URL
 
-## 🔗 Related Actors
+1. Go to [idealista.com](https://www.idealista.com) and configure your search with filters (price range, bedrooms, amenities, etc.)
+2. Copy the URL from your browser — e.g. `https://www.idealista.com/venta-viviendas/madrid/con-terraza/?ordenado-por=precio-asc`
+3. Paste it into **Start URLs**
+4. Set **Max Results** and click Run
 
-If you're looking for more Idealista data, check out our other scrapers:
+### Code example — via Apify API
 
-- [**Idealista Auto-Complete**](https://apify.com/burbn/idealista-auto-complete) 📍 — Find Idealista location IDs for any city, neighborhood, or area.
+```
+const { ApifyClient } = require('apify-client');
+const client = new ApifyClient({ token: 'YOUR_TOKEN' });
 
-## 🏷️ Tags
+const run = await client.actor('khadinakbaronline/idealista-scraper').call({
+    operation: 'sale',
+    propertyType: 'homes',
+    location: 'madrid',
+    country: 'es',
+    maxResults: 100,
+    capsolverApiKey: 'YOUR_CAPSOLVER_KEY',
+});
 
-`idealista` `idealista scraper` `idealista properties` `idealista api` `idealista real estate` `idealista rent` `idealista sale` `property scraper` `real estate scraper` `real estate data` `property search` `rental properties` `properties for sale` `italy real estate` `spain real estate` `portugal real estate` `idealista crawler` `idealista extractor` `property prices` `property listings` `apartment search` `house search` `real estate api` `property data scraper` `idealista italy` `idealista spain` `idealista portugal`
+const { items } = await client.dataset(run.defaultDatasetId).listItems();
+console.log(items);
+```
 
-## 🎁 Get $5 Free Apify Credits
+```
+from apify_client import ApifyClient
 
-New to Apify? [Sign up using this link](https://apify.com/?fpr=free-credits) and get **$5 free credits** to start scraping Idealista right away! No credit card required.
+client = ApifyClient('YOUR_TOKEN')
+run = client.actor('khadinakbaronline/idealista-scraper').call(run_input={
+    'operation': 'sale',
+    'propertyType': 'homes',
+    'location': 'barcelona',
+    'country': 'es',
+    'maxResults': 200,
+    'capsolverApiKey': 'YOUR_CAPSOLVER_KEY',
+})
+items = list(client.dataset(run['defaultDatasetId']).iterate_items())
+```
 
-## 📞 Support
+## 🤖 MCP Server Integration (AI Agents)
 
-For questions, feedback, or issues with this Idealista property scraper, please contact us through Apify or open an issue.
+Idealista Scraper is fully compatible with the **[Apify MCP Server](https://apify.com/apify/actors-mcp-server)**, which lets AI agents like Claude, ChatGPT, and Cursor directly call Apify actors as tools.
 
----
+### Connect via Apify MCP Server
 
-**Happy scraping Idealista! 🏠✨**
+Add the following to your MCP client configuration (e.g. Claude Desktop `claude_desktop_config.json`):
+
+```
+{
+  "mcpServers": {
+    "apify": {
+      "command": "npx",
+      "args": ["-y", "@apify/actors-mcp-server"],
+      "env": {
+        "APIFY_TOKEN": "YOUR_APIFY_TOKEN",
+        "ACTORS": "khadinakbaronline/idealista-scraper"
+      }
+    }
+  }
+}
+```
+
+Once connected, your AI agent can call the scraper with natural language:
+
+> "Scrape 50 homes for sale in Madrid from Idealista and return properties under €400,000"
+
+### MCP Tool Schema
+
+The actor exposes these input parameters as MCP tool arguments:
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `location` | string | City slug (e.g. `madrid`, `roma`, `lisboa`) |
+| `country` | string | `es`, `it`, or `pt` |
+| `operation` | string | `sale` or `rent` |
+| `propertyType` | string | `homes`, `offices`, `garages`, etc. |
+| `maxResults` | number | Max properties to return (1–10,000) |
+| `startUrls` | array | Direct Idealista search URLs (optional) |
+| `capsolverApiKey` | string | CapSolver key for CAPTCHA bypass (recommended) |
+
+### Apify MCP Server — Actors Directory
+
+Find this actor and thousands more at the **[Apify MCP Server Actors Directory](https://apify.com/store)**. The MCP server supports dynamic actor discovery — you can list available actors, check their schemas, and call them without writing any code.
+
+Install the MCP server:
+
+```
+$npx @apify/actors-mcp-server
+```
+
+## Key-Value Store Output
+
+In addition to the main dataset, each run writes a `SCRAPE_STATS` summary to the default Key-Value Store:
+
+```
+{
+  "totalScraped": 50,
+  "targetLocation": "madrid",
+  "country": "es",
+  "operation": "sale",
+  "propertyType": "homes",
+  "capsolverUsed": true,
+  "captchasSolved": 2,
+  "pagesScraped": 3,
+  "durationSeconds": 145,
+  "startedAt": "2025-01-15T10:00:00.000Z",
+  "finishedAt": "2025-01-15T10:02:25.000Z"
+}
+```
+
+## Pricing
+
+This actor uses **PAY_PER_EVENT** billing — you only pay for actual properties scraped.
+
+| Apify Plan | Price per property |
+| --- | --- |
+| FREE | $0.003 |
+| BRONZE | $0.003 |
+| SILVER | $0.0025 |
+| GOLD | $0.002 |
+| PLATINUM | $0.0015 |
+| DIAMOND | $0.001 |
+
+**Example costs:**
+
+- 100 properties ≈ $0.30
+- 1,000 properties ≈ $3.00
+- 10,000 properties ≈ $30.00
+
+Much cheaper than flat monthly subscriptions ($15–$19/month) if you scrape fewer than 5,000 properties/month.
+
+## Use cases
+
+- **Real estate investors** — identify undervalued properties by price-per-m² across neighborhoods
+- **Market analysts** — track price trends over time across cities or provinces
+- **Real estate agencies** — competitive monitoring and lead generation
+- **Property developers** — build valuation tools, market dashboards, or investment scoring models
+- **AI pipelines** — feed structured property data into LLMs (via MCP) for analysis, Q&A, and recommendations
+- **Academic researchers** — housing market studies across Spain, Italy, and Portugal
+
+## Technical notes
+
+- Uses **Playwright** browser automation with headful mode (`headless: false`) on Apify's xvfb display — this causes DataDome to serve a softer device-check interstitial rather than an immediate hard block
+- Requires **Spanish Residential Proxies** to bypass DataDome (default proxy configuration is pre-set; do not change)
+- **CapSolver** `DatadomeSliderTask` integration for automatic CAPTCHA solving (~$0.004/solve)
+- Crawlee fingerprint injection (CDP-level) for Windows/macOS/Spanish locale
+- Native `page.addInitScript()` patches for `navigator.webdriver`, `window.chrome`, permissions, and other automation signals
+- Automatically handles cookie consent popups
+- Full pagination — navigates all result pages
+- Session pooling and retry logic for reliability
+- Writes `SCRAPE_STATS` summary to Key-Value Store at end of each run
+
+## Legal disclaimer
+
+*This actor is intended for lawful data collection from publicly available sources. Users are responsible for compliance with applicable laws, Idealista's terms of service, and data protection regulations (GDPR, CCPA, etc.). Do not use this actor to collect personal data without a lawful basis, or to systematically copy Idealista's database.*
