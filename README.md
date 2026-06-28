@@ -1,288 +1,141 @@
-[Idealista Scraper](https://apify.com/igolaizola/idealista-scraper?fpr=data)
+[Idealista Scraper](https://apify.com/makework36/idealista-scraper?fpr=data)
 
-> 💼 If you're looking to scrape **agencies instead of properties**,
-> 
-> check this actor instead: 👉 [igolaizola/idealista-agency-scraper](https://apify.com/igolaizola/idealista-agency-scraper?fpr=ig)
+# Idealista Real Estate Scraper
 
-## 🤖 What does Idealista-Scraper do?
+> ⭐ **Useful?** [Leave a review](https://apify.com/makework36/idealista-scraper/reviews) — takes 10 seconds and helps a lot!
 
-Idealista-Scraper enables you to easily get data from [idealista.com](https://idealista.com) for a very low price.
+Scrape property listings from Idealista.com. Works with Spanish, Italian, and Portuguese markets. Extracts prices, locations, details, and images from search result pages.
 
-It can scrape:
+## What data does it extract?
 
-- 🏘️ Properties for **sale** in Spain, Italy, and Portugal
-- 🔑 Properties for **rent** in Spain, Italy, and Portugal
+| Field | Description |
+| --- | --- |
+| title | Listing title (e.g., "Flat in calle de Alcalá") |
+| price | Listed price (e.g., "€285,000") |
+| details | Size, rooms, floor info (e.g., "3 bed, 2 bath, 95 m²") |
+| location | Neighborhood or area |
+| url | Direct link to the listing |
+| image | Main listing photo URL |
+| searchUrl | The search URL this listing came from |
+| scrapedAt | ISO timestamp |
 
-## 💡 Why scrape idealista.com?
+## Use cases
 
-idealista.com has thousands of properties listed and is a great source of data for Real Estate professionals, investors, and anyone looking to buy or rent a property.
-With Idealista-Scraper, you can get the data you need to make informed decisions about your next property purchase or rental.
+- **Property market research** — Track asking prices across neighborhoods or cities
+- **Investment analysis** — Monitor listings in target areas to spot deals
+- **Price comparison** — Compare prices per square meter across different zones
+- **Real estate data feeds** — Build datasets for property analytics dashboards
+- **Relocation research** — Quickly gather and compare available properties in a new city
 
-Here are just some of the ways you could use that data:
+## How to use
 
-- 📈 Analyze market trends and property price fluctuations in specific areas
-- 👀 Monitor competitive pricing for real estate agencies and investors
-- 🎯 Generate leads for real estate businesses
-- 📊 Research rental yields and investment opportunities in different neighborhoods
-
-## 🚀 How to scrape idealista.com
-
-It's easy to scrape [idealista.com](https://idealista.com) with Idealista-Scraper. Just follow these few steps and you'll get your data in minutes:
-
-1. Click **Try for free**
-2. Enter the **operation**, **property type**, **country**, and **location**
-3. (Optional) Set filters like price, size, bedrooms, etc.
-4. Click **Run**
-5. When the run finishes, preview or download your data from the **Dataset** tab
-6. Click **All fields** to view all available data for each property and choose json or csv format.
-
-## ⚠️ Important Warnings
-
-- **Max items > 2500**: If `maxItems` is **greater than 2500**, the location will be **automatically split into sub-locations**. This **affects ordering** (results are grouped by sub-locations), so you might not get a strict global sort.
-- **Fetch details** (`fetchDetails`): Adds **1 extra request per property** and is **~50× slower overall**. This feature is in **beta**; use with caution.
-- **Fetch stats** (`fetchStats`): Adds **1 extra request per property** and is **~50× slower overall**. Produces a `_stats` field per property. This feature is in **beta**; use with caution.
-
-## 💳 How much will it cost to scrape idealista.com?
-
-Apify provides you with $5 free usage credits every month on the [Apify Free plan](https://apify.com/pricing). You can try and test Idealista-Scraper for free with the Free plan for a limited time.
-
-However, if you need to get more data regularly from idealista.com, you should get an Apify subscription. We recommend our [$49/month Personal plan](https://apify.com/pricing) – this plan covers the costs of Idealista-Scraper and numerous executions.
-
-## 📝 Input Parameters
-
-You can provide either a **city name** or an **Idealista Location ID** for `location`. Find the Location ID with the **[Idealista Location Search Tool](https://igolaizola.github.io/idealista-scraper)**.
-
-If you already know the listing codes, you can set `propertyCodes` to fetch those properties directly. When `propertyCodes` is provided, `location`, `fetchDetails`, and all filtering options are ignored. The actor always returns `_details` for each code (and `_stats` if `fetchStats` is enabled).
-
-### Required
-
-| Parameter | Options / Example | Description |
-| --- | --- | --- |
-| `operation` | `sale` | `rent` | Listing operation |
-| `propertyType` | `homes`, `newDevelopments`, `offices`, `premises`, `garages`, `lands`, `storageRooms`, `buildings`, `bedrooms` | Type of property |
-| `country` | `es` | `pt` | `it` | Country |
-| `location` | `"Madrid"` or `"0-EU-ES-28-07-001-079"` | City name or Idealista Location ID |
-
-### Core options
-
-| Parameter | Type / Options | Description |
-| --- | --- | --- |
-| `propertyCodes` | Array of strings, e.g. `["12345678","87654321"]` | Fetch specific properties by code. Overrides location and filters; always populates `_details`. |
-| `maxItems` | Integer (default **50**, `0` = unlimited) | **Recommended ≤ 2500**. If `> 2500`, the actor splits the location into sub-locations and ordering is grouped. |
-| `sortBy` | `relevance`, `closest`, `lowestPrice`, `highestPrice`, `mostRecent`, `leastRecent`, `highestPriceReduction`, `lowestPriceM2`, `highestPriceM2`, `biggest`, `smallest`, `highestFloors`, `lowestFloors` | Sorting method for results |
-| `fetchDetails` | Boolean (default `false`) | Fetch a detailed page per property → adds `_details` (beta). **Much slower & costlier**. |
-| `fetchStats` | Boolean (default `false`) | Fetch per-listing statistics → adds `_stats` (beta). **1 extra request per property, ~50× slower overall**. |
-| `minPrice` | **String** (default `"0"`) or preset steps: `"500"`–`"3000"` (rent) and `"50000"`–`"4000000"` (sale) | Minimum price (`"0"` = any) |
-| `maxPrice` | **String** (default `"0"`) or preset steps: `"500"`–`"3000"` (rent) and up to `"4000000"` (sale) | Maximum price (`"0"` = any) |
-| `minSize` | **String** (default `"0"`) or preset steps (m²): `"60"`, `"80"`, `"100"`, …, `"300"` | Minimum size in m² (`"0"` = any) |
-| `maxSize` | **String** (default `"0"`) or preset steps (m²): `"60"`, `"80"`, `"100"`, …, `"300"` | Maximum size in m² (`"0"` = any) |
-| `publicationDate` | `""` (any), `Y` (last 48h, only for `sale` operation), `T` (last 24h, only for `rent` operation), `W` (last week), `M` (last month) | Filter by publication date |
-
-### Advanced filters
-
-- `rentalTypes` (array, only for `rent`): `["longTerm","seasonal"]` (long-term residential, short-term)
-- `bedrooms` (array): `["studio","1","2","3","4"]` (leave empty for any)
-- `bathrooms` (array): `["1","2","3"]` (leave empty for any)
-- `homeType` (array): `["flat","penthouse","duplex","detachedHouse","semiDetachedHouse","terracedHouse","countryHouse","apartment","villa","loft"]`
-- `condition` (array): `["newDevelopment","good","renew"]`
-- `propertyStatus` (array): `["bareOwnership","tenanted","illegallyOccupied","free"]`
-- `floor` (array): `["topFloor","intermediateFloor","groundFloor"]`
-
-### Amenities & features (booleans)
-
-`airConditioning`, `fittedWardrobes`, `lift`, `balcony`, `terrace`, `exterior`, `garage`, `garden`, `swimmingPool`, `storageRoom`, `accessible`, `seaViews`, `luxury`, `plan` (floor plan), `virtualTour`.
-
-### Agency filter
-
-- `agency` (string): Filter properties by agency. Use the slug from the agency page URL, e.g., `engel-volkers` in `https://www.idealista.com/pro/engel-volkers/`.
-
-### Proxy
-
-Use Apify's proxy editor via `proxyConfiguration`:
-
-- `useApifyProxy: true`
-- (Recommended) `apifyProxyGroups: ["RESIDENTIAL"]`
-
-> Residential proxies help prevent detection and IP blocking.
-
-### Example input
+### Search for apartments in Madrid
 
 ```
 {
-  "maxItems": 100,
-  "operation": "sale",
-  "propertyType": "homes",
-  "country": "es",
-  "location": "0-EU-ES-28-07-001-079",
-  "sortBy": "mostRecent",
-  "fetchDetails": false,
-  "fetchStats": false,
-  "minPrice": 200000,
-  "maxPrice": 500000,
-  "minSize": 80,
-  "maxSize": 120,
-  "publicationDate": "W",
-  "bedrooms": ["2", "3"],
-  "bathrooms": ["2"],
-  "homeType": ["flat", "penthouse"],
-  "condition": ["newDevelopment", "good"],
-  "propertyStatus": [],
-  "floor": ["intermediateFloor"],
-  "airConditioning": true,
-  "fittedWardrobes": true,
-  "lift": true,
-  "balcony": false,
-  "terrace": false,
-  "exterior": true,
-  "garage": true,
-  "garden": false,
-  "swimmingPool": false,
-  "storageRoom": true,
-  "accessible": false,
-  "seaViews": false,
-  "luxury": false,
-  "plan": false,
-  "virtualTour": false,
-  "proxyConfiguration": {
-    "useApifyProxy": true,
-    "apifyProxyGroups": ["RESIDENTIAL"]
-  }
+    "searchUrls": [
+        "https://www.idealista.com/en/venta-viviendas/madrid/"
+    ],
+    "maxListings": 50
 }
 ```
 
-## 📊 Results
-
-You'll get a list of property objects similar to Idealista's listing data.
-If `fetchDetails: true`, each item includes an extra field: **`_details`** with detailed page data (beta).
-If `fetchStats: true`, each item includes an extra field: **`_stats`** with per-listing statistics (beta).
+### Multiple searches
 
 ```
-[
-  {
-    "propertyCode": "106316721",
-    "thumbnail": "https://img4.idealista.com/blur/WEB_LISTING-M/0/id.pro.es.image.master/46/12/06/1279185415.webp",
-    "externalReference": "21",
-    "numPhotos": 23,
-    "floor": "3",
-    "price": 105000,
-    "priceInfo": {
-      "price": {
-        "amount": 105000
-      }
-    },
-    "propertyType": "flat",
-    "operation": "sale",
-    "size": 78,
-    "exterior": true,
-    "rooms": 3,
-    "bathrooms": 1,
-    "address": "plaza Labradores, 9 --11",
-    "province": "La Rioja",
-    "municipality": "Ezcaray",
-    "district": "",
-    "country": "es",
-    "locationId": "0-EU-ES-26-02-002-061",
-    "latitude": 42.3203813,
-    "longitude": -3.0147614,
-    "showAddress": true,
-    "url": "https://www.idealista.com/inmueble/106316721/",
-    "description": "Ezcaray ofrece algunas de las mejores vistas a las montañas en La Rioja, convirtiéndolo en un destino ideal para los amantes de la naturaleza y la aventura.     Desde esta vivienda lo puedes comprobar! Gracias a su altura y orientación vas a poder disfrutar de las mejores vistas de Ezcaray.     Tiene tres habitaciones bien orientadas, una de ellas con mirador y balcón orientados al sur, salón, cocina amplia y baño completo.     Calefacción con calefactor de leña e instalación de radiadores.     Merece la pena llamar y concertar una visita!",
-    "hasVideo": true,
-    "status": "renew",
-    "newDevelopment": false,
-    "favourite": false,
-    "newProperty": false,
-    "multimedia": {
-      "images": [
-        {
-          "url": "https://img4.idealista.com/blur/WEB_LISTING-M/0/id.pro.es.image.master/46/12/06/1279185415.webp",
-          "tag": "views"
-        },
-        {
-          "url": "https://img4.idealista.com/blur/WEB_LISTING-M/0/id.pro.es.image.master/56/0f/43/1279185423.webp",
-          "tag": "kitchen"
-        },
-        {
-          "url": "https://img4.idealista.com/blur/WEB_LISTING-M/0/id.pro.es.image.master/1c/91/45/1279185430.webp",
-          "tag": "livingRoom"
-        },
-        {
-          "url": "https://img4.idealista.com/blur/WEB_LISTING-M/0/id.pro.es.image.master/4d/03/c6/1279185433.webp",
-          "tag": "bedroom"
-        }
-      ],
-      "virtual3DTours": []
-    },
-    "contactInfo": {
-      "commercialName": "INMOBILIARIA  LA ZALAYA ",
-      "contactName": "INMOBILIARIA  LA ZALAYA ",
-      "userType": "professional",
-      "contactMethod": "all",
-      "phone1": {
-        "phoneNumber": "941776986",
-        "formattedPhone": "941 77 69 86",
-        "prefix": "34",
-        "phoneNumberForMobileDialing": "+34941776986",
-        "nationalNumber": true
-      },
-      "agencyLogo": "https://st3.idealista.com/9e/99/38/inmobiliaria-la-zalaya.gif",
-      "micrositeShortName": "inmobiliaria-la-zalaya",
-      "totalAds": 0
-    },
-    "hasLift": false,
-    "parkingSpace": {
-      "hasParkingSpace": false,
-      "isParkingSpaceIncludedInPrice": false
-    },
-    "priceByArea": 1346,
-    "features": {
-      "hasSwimmingPool": false,
-      "hasTerrace": false,
-      "hasAirConditioning": false,
-      "hasBoxRoom": false,
-      "hasGarden": false
-    },
-    "detailedType": {
-      "typology": "flat"
-    },
-    "suggestedTexts": {
-      "subtitle": "",
-      "title": "Piso en plaza Labradores, 9 --11"
-    },
-    "hasPlan": false,
-    "has3DTour": false,
-    "has360": false,
-    "hasStaging": false,
-    "isOnlineBookingActive": false,
-    "ribbons": [],
-    "topNewDevelopment": false,
-    "topPlus": false,
-    "preferenceHighlight": false,
-    "urgentVisualHighlight": false,
-    "visualHighlight": false,
-    "topHighlight": false,
-    "_details": {
-      /* present only when fetchDetails=true (beta) */
-    },
-
-    "_stats": {
-      /* present only when fetchStats=true (beta) */
-      "views": { "value": 6539, "text": "6,539 views" },
-      "contactMails": { "value": 18, "text": "18 email contacts" },
-      "sentToFriend": { "value": 1, "text": "1 time sent to friends" },
-      "favorites": { "value": 266, "text": "saved as favourite 266 times" }
-    }
-  }
-  ...
-]
+{
+    "searchUrls": [
+        "https://www.idealista.com/en/venta-viviendas/barcelona/eixample/",
+        "https://www.idealista.com/en/alquiler-viviendas/madrid/centro/",
+        "https://www.idealista.com/en/venta-viviendas/valencia/"
+    ],
+    "maxListings": 100
+}
 ```
 
-## 🌍 Proxy
+### Rental listings in Lisbon
 
-Idealista-Scraper uses Apify Residential Proxies to prevent detection and IP blocking.
-Apify Proxy is a rotating proxy service that provides a pool of IP addresses.
-This way, Idealista-Scraper can make a large number of requests to idealista.com without being blocked.
+```
+{
+    "searchUrls": [
+        "https://www.idealista.pt/arrendar-casas/lisboa/"
+    ],
+    "maxListings": 30
+}
+```
 
-## ⚖️ Is it legal to scrape idealista.com?
+## Input parameters
 
-Note that personal data is protected by GDPR in the European Union and by other regulations around the world. You should not scrape personal data unless you have a legitimate reason to do so. If you're unsure whether your reason is legitimate, consult your lawyers. We also recommend that you read our blog post: [is web scraping legal?](https://blog.apify.com/is-web-scraping-legal/)
+| Parameter | Type | Default | Description |
+| --- | --- | --- | --- |
+| searchUrls | string[] | — | Idealista search result page URLs (required) |
+| maxListings | integer | 50 | Maximum listings to extract (1-500) |
+
+## Output example
+
+```
+{
+    "title": "Flat in calle de Serrano, Salamanca, Madrid",
+    "price": "€485,000",
+    "details": "3 bed · 2 bath · 110 m² · 4th floor with lift",
+    "location": "Salamanca, Madrid",
+    "url": "https://www.idealista.com/inmueble/12345678/",
+    "image": "https://img3.idealista.com/blur/WEB_LISTING/0/id.pro.es/12345678_xxl.jpg",
+    "searchUrl": "https://www.idealista.com/en/venta-viviendas/madrid/barrio-de-salamanca/",
+    "scrapedAt": "2025-03-22T18:06:12.000Z"
+}
+```
+
+## Performance & cost
+
+- Uses residential proxies geolocated in Spain to avoid blocks
+- Handles Idealista's cookie consent popup automatically
+- Falls back to JSON-LD structured data if DOM selectors fail
+- Retries up to 5 times per URL with different proxy sessions
+
+## FAQ
+
+**How do I get the search URLs?**
+Go to idealista.com (or idealista.pt / idealista.it), set your filters (location, price range, bedrooms, etc.), and copy the URL from your browser. The scraper works with whatever filters you apply on the site.
+
+**Does it scrape individual listing detail pages?**
+No — it extracts data from search result pages only. Each listing includes a direct URL you can use to visit the full detail page.
+
+**Why does Idealista block requests?**
+Idealista has aggressive anti-scraping measures. The actor uses stealth browser settings and residential proxies to work around this, but some requests may still fail. Running with a lower `maxListings` value and from Spanish IPs gives the best results.
+
+**Does it work with Idealista Italy and Portugal?**
+Yes. Use the appropriate domain: idealista.it for Italy, idealista.pt for Portugal. The scraper extracts the same fields regardless of the country.
+
+## ❓ Extended FAQ
+
+### How much does it cost to scrape Idealista?
+
+Pay-per-result on Apify (no monthly subscription). At $1.00 per 1,000 listings, scraping 100 properties costs ~$0.10. Apify Free plan includes $5 credit (~5,000 listings to start).
+
+### Is Idealista scraping legal in Spain?
+
+Idealista listings are public data. Scraping for personal market research, lead generation, or analytics is generally legal under EU GDPR when the data is non-personal. Always respect Idealista's Terms of Service and don't republish copyrighted content.
+
+### Can I get historical Idealista price data?
+
+The scraper returns current listings only. To track price history, schedule the scraper to run daily or weekly (Apify supports cron schedules) and store results.
+
+### Which Idealista markets are supported?
+
+Idealista España (.com), Italia (.it), and Portugal (.pt) — all three countries Idealista operates in. Pass URLs from any domain.
+
+### Can I filter by price range, rooms, or property type?
+
+Yes — apply the filters directly on idealista.com / .it / .pt before copying the URL. The scraper respects all filter parameters in the URL.
+
+### What's the difference vs other Idealista scrapers?
+
+HTTP + light browser fallback (no full Puppeteer overhead). 5-10× cheaper compute than browser-only competitors. Built-in residential proxy + retries to handle Idealista's anti-bot measures.
+
+## 🔗 Other scrapers by makework36
+
+- [VRBO Scraper](https://apify.com/makework36/vrbo-scraper) — vacation rentals + Expedia hotels
+- [Trustpilot Scraper API](https://apify.com/makework36/trustpilot-reviews-scraper) — reviews & business search
+- [Fast Airbnb Price Scraper](https://apify.com/makework36/fast-airbnb-price-scraper) — Airbnb listings + prices
+- [Flight Price Scraper 2026](https://apify.com/makework36/flight-price-scraper) — compare flights across 7 sources
